@@ -1,6 +1,5 @@
 package src.view;
 
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -102,8 +101,6 @@ public class ColaboradorView {
   }
 
   public static void relatorio(Colaborador colaborador) {
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
     System.out.println("Mostrando dados do colaborador de ID " + colaborador.getId() + ":");
 
     System.out.println();
@@ -129,7 +126,7 @@ public class ColaboradorView {
       colaborador.getProjetos().stream().filter(projeto -> projeto.getDataTermino() != null)
           .sorted(Comparator.comparing(Projeto::getDataTermino).reversed()).collect(Collectors.toList())
           .forEach(projeto -> System.out.println(String.format("%-15s", projeto.getStatus().getDescricao()) + "|     "
-              + sdf.format(projeto.getDataTermino()) + "    |  " + projeto.getTitulo()));
+              + Util.formatDate(projeto.getDataTermino()) + "    |  " + projeto.getTitulo()));
     } else {
       System.out.println("O colaborador nao foi alocado em nenhum projeto ainda.");
     }

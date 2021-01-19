@@ -1,10 +1,10 @@
 package src.model;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import src.model.enums.*;
+import src.util.Util;
 
 public class Laboratorio {
   private String nome;
@@ -80,44 +80,6 @@ public class Laboratorio {
     return producoesAcademicas.get(id - 1);
   }
 
-  public ArrayList<Colaborador> buscaColaboradores(String termo) {
-    ArrayList<Colaborador> result = new ArrayList<Colaborador>();
-
-    colaboradores.forEach(colaborador -> {
-      if (colaborador.getNome().matches("(?i).*" + termo + ".*")
-          || colaborador.getEmail().matches(".*" + termo + ".*")) {
-        result.add(colaborador);
-      }
-    });
-
-    return result;
-  }
-
-  public ArrayList<Projeto> buscaProjetos(String termo) {
-    ArrayList<Projeto> result = new ArrayList<Projeto>();
-
-    projetos.forEach(projeto -> {
-      if (projeto.getTitulo().matches("(?i).*" + termo + ".*") || (projeto.getAgenciaFinanciadora() != null
-          && projeto.getAgenciaFinanciadora().matches("(?i).*" + termo + ".*"))) {
-        result.add(projeto);
-      }
-    });
-
-    return result;
-  }
-
-  public ArrayList<ProducaoAcademica> buscaProducaoAcademica(String termo) {
-    ArrayList<ProducaoAcademica> result = new ArrayList<ProducaoAcademica>();
-
-    producoesAcademicas.forEach(producaoAcademica -> {
-      if (producaoAcademica.getTitulo().matches("(?i).*" + termo + ".*")) {
-        result.add(producaoAcademica);
-      }
-    });
-
-    return result;
-  }
-
   public String criarColaborador(String nome, String email, int tipo) {
     TipoColaborador t;
 
@@ -157,21 +119,17 @@ public class Laboratorio {
   public String criarProjetoCompleto(String titulo, String dataInicio, String dataTermino, String agenciaFinanciadora,
       float valorFinanciado, String objetivo, String descricao, int idResponsavel) {
     if (colaboradores.get(idResponsavel - 1).getTipo() == TipoColaborador.Prof) {
-
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      sdf.setLenient(false);
-      Date dI, dT;
-
       try {
-        dI = sdf.parse(dataInicio);
-        dT = sdf.parse(dataTermino);
-      } catch (Exception e) {
-        return "Uma das datas informadas nao e valida";
-      }
+        Date dI = Util.parseDate(dataInicio);
+        Date dT = Util.parseDate(dataTermino);
 
-      this.projetos.add(new Projeto(projetos.size() + 1, titulo, dI, dT, agenciaFinanciadora, valorFinanciado, objetivo,
-          descricao, colaboradores.get(idResponsavel - 1)));
-      return "";
+        this.projetos.add(new Projeto(projetos.size() + 1, titulo, dI, dT, agenciaFinanciadora, valorFinanciado,
+            objetivo, descricao, colaboradores.get(idResponsavel - 1)));
+
+        return "";
+      } catch (Exception e) {
+        return "Nao foi possivel criar o projeto. Voce informou uma data invalida!";
+      }
     }
     return "O responsavel informado nao e um professor";
   }

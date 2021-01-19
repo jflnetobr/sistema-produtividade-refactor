@@ -1,6 +1,5 @@
 package src.view;
 
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -338,8 +337,6 @@ public class ProjetoView {
   }
 
   public static void relatorio(Projeto projeto) {
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
     System.out.println("Mostrando dados do projeto de ID " + projeto.getId() + ":");
 
     System.out.println();
@@ -350,9 +347,9 @@ public class ProjetoView {
 
     System.out.println(" - Titulo: " + projeto.getTitulo());
     System.out.println(" - Data de inicio: "
-        + (projeto.getDataInicio() != null ? sdf.format(projeto.getDataInicio()) : "Desconhecida"));
+        + (projeto.getDataInicio() != null ? Util.formatDate(projeto.getDataInicio()) : "Desconhecida"));
     System.out.println(" - Data de termino: "
-        + (projeto.getDataTermino() != null ? sdf.format(projeto.getDataTermino()) : "Desconhecida"));
+        + (projeto.getDataTermino() != null ? Util.formatDate(projeto.getDataTermino()) : "Desconhecida"));
     System.out.println(" - Agencia Financiadora: " + projeto.getAgenciaFinanciadora());
     System.out.println(" - Valor Financiado: R$ " + projeto.getValorFinanciado());
     System.out.println();

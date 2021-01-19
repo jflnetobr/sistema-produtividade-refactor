@@ -1,10 +1,10 @@
 package src.model;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import src.model.states.*;
+import src.util.Util;
 
 /*
 * Nesta classe implementam-se os padrões:
@@ -172,28 +172,23 @@ public class Projeto {
   public String complementarDados(String dataInicio, String dataTermino, String agenciaFinanciadora,
       float valorFinanciado, String objetivo, String descricao) {
     if (!this.isCompleto()) {
-
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      sdf.setLenient(false);
-      Date dI, dT;
-
       try {
-        dI = sdf.parse(dataInicio);
-        dT = sdf.parse(dataTermino);
+        Date dI = Util.parseDate(dataInicio);
+        Date dT = Util.parseDate(dataTermino);
+
+        this.setDataInicio(dI);
+        this.setDataTermino(dT);
+        this.setAgenciaFinanciadora(agenciaFinanciadora);
+        this.setValorFinanciado(valorFinanciado);
+        this.setObjetivo(objetivo);
+        this.setDescricao(descricao);
+
+        this.setCompleto(true);
+
+        return "";
       } catch (Exception e) {
-        return "Uma das datas informadas nao e valida";
+        return "Nao foi possivel completar as informacoes. Voce informou uma data invalida!";
       }
-
-      this.setDataInicio(dI);
-      this.setDataTermino(dT);
-      this.setAgenciaFinanciadora(agenciaFinanciadora);
-      this.setValorFinanciado(valorFinanciado);
-      this.setObjetivo(objetivo);
-      this.setDescricao(descricao);
-
-      this.setCompleto(true);
-
-      return "";
     }
     return "O Projeto ja tem as informacoes basicas";
   }
