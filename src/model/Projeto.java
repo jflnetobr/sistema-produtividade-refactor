@@ -6,6 +6,10 @@ import java.util.Date;
 
 import src.model.enums.*;
 
+/*
+* Nesta classe implementa-se o padrão Chain constructors
+*/
+
 public class Projeto {
   private int id;
   private String titulo;
@@ -16,14 +20,12 @@ public class Projeto {
   private String objetivo;
   private String descricao;
   private Status status;
+  private boolean completo;
   private ArrayList<Colaborador> colaboradores = new ArrayList<Colaborador>();
   private ArrayList<Publicacao> publicacoes = new ArrayList<Publicacao>();
 
   public Projeto(int id, String titulo, Colaborador responsavel) {
-    this.id = id;
-    this.titulo = titulo;
-    this.status = Status.E;
-    colaboradores.add(responsavel);
+    this(id, titulo, null, null, "", 0, "", "", responsavel);
   }
 
   public Projeto(int id, String titulo, Date dataInicio, Date dataTermino, String agenciaFinanciadora,
@@ -37,6 +39,7 @@ public class Projeto {
     this.objetivo = objetivo;
     this.descricao = descricao;
     this.status = Status.E;
+    this.completo = dataInicio != null ? true : false;
     colaboradores.add(responsavel);
   }
 
@@ -74,6 +77,10 @@ public class Projeto {
 
   public Status getStatus() {
     return status;
+  }
+
+  public boolean isCompleto() {
+    return completo;
   }
 
   public ArrayList<Colaborador> getColaboradores() {
@@ -120,6 +127,10 @@ public class Projeto {
     this.status = status;
   }
 
+  public void setCompleto(boolean completo) {
+    this.completo = completo;
+  }
+
   public void setColaboradores(ArrayList<Colaborador> colaboradores) {
     this.colaboradores = colaboradores;
   }
@@ -130,8 +141,7 @@ public class Projeto {
 
   public String complementarDados(String dataInicio, String dataTermino, String agenciaFinanciadora,
       float valorFinanciado, String objetivo, String descricao) {
-    if (this.dataInicio == null && this.dataTermino == null && this.agenciaFinanciadora == null
-        && this.valorFinanciado == 0 && this.objetivo == null && this.descricao == null) {
+    if (!this.isCompleto()) {
 
       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
       sdf.setLenient(false);
@@ -144,12 +154,15 @@ public class Projeto {
         return "Uma das datas informadas nao e valida";
       }
 
-      this.dataInicio = dI;
-      this.dataTermino = dT;
-      this.agenciaFinanciadora = agenciaFinanciadora;
-      this.valorFinanciado = valorFinanciado;
-      this.objetivo = objetivo;
-      this.descricao = descricao;
+      this.setDataInicio(dI);
+      this.setDataTermino(dT);
+      this.setAgenciaFinanciadora(agenciaFinanciadora);
+      this.setValorFinanciado(valorFinanciado);
+      this.setObjetivo(objetivo);
+      this.setDescricao(descricao);
+
+      this.setCompleto(true);
+
       return "";
     }
     return "O Projeto ja tem as informacoes basicas";
@@ -157,8 +170,7 @@ public class Projeto {
 
   public String avancaStatus() {
     if (status == Status.E) {
-      if (this.dataInicio != null && this.dataTermino != null && this.agenciaFinanciadora != null
-          && this.valorFinanciado != 0 && this.objetivo != null && this.descricao != null) {
+      if (this.isCompleto()) {
         for (int i = 0; i < colaboradores.size(); i++) {
           if (colaboradores.get(i).getTipo() == TipoColaborador.G) {
             if (colaboradores.get(i).getProjetos().stream().filter(projeto -> projeto.getStatus() == Status.A)
