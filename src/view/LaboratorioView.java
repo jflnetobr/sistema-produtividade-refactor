@@ -3,11 +3,13 @@ package src.view;
 import java.util.Scanner;
 
 import src.model.*;
-import src.model.enums.*;
 import src.util.Util;
+import src.view.reports.*;
 
 public class LaboratorioView {
   public static void menuRelatorios(Laboratorio lab, Scanner scanner) {
+    Relatorio relatorio;
+
     Util.clrscr();
 
     loop: while (true) {
@@ -33,7 +35,8 @@ public class LaboratorioView {
       switch (op) {
         case "1":
           Util.clrscr();
-          relatorio(lab);
+          relatorio = new Relatorio(new LaboratorioReport(lab));
+          relatorio.execute();
           System.out.println();
           System.out.println("Pressione ENTER para continuar...");
           scanner.nextLine();
@@ -41,7 +44,8 @@ public class LaboratorioView {
           break;
         case "2":
           Util.clrscr();
-          relatorioColaboradores(lab);
+          relatorio = new Relatorio(new ColaboradorReport(lab));
+          relatorio.execute();
           System.out.println();
           System.out.println("Pressione ENTER para continuar...");
           scanner.nextLine();
@@ -49,7 +53,8 @@ public class LaboratorioView {
           break;
         case "3":
           Util.clrscr();
-          relatorioProjetos(lab);
+          relatorio = new Relatorio(new ProjetoReport(lab));
+          relatorio.execute();
           System.out.println();
           System.out.println("Pressione ENTER para continuar...");
           scanner.nextLine();
@@ -57,7 +62,8 @@ public class LaboratorioView {
           break;
         case "4":
           Util.clrscr();
-          relatorioProducaoAcademica(lab);
+          relatorio = new Relatorio(new ProducaoAcademicaReport(lab));
+          relatorio.execute();
           System.out.println();
           System.out.println("Pressione ENTER para continuar...");
           scanner.nextLine();
@@ -74,130 +80,4 @@ public class LaboratorioView {
 
   }
 
-  public static void relatorio(Laboratorio laboratorio) {
-    System.out.println("O laboratorio " + laboratorio.getNome() + " da instituicao " + laboratorio.getInstituicao()
-        + " tem atualmente os seguintes numeros:");
-
-    System.out.println();
-
-    System.out.println(" - " + String.format("%02d", laboratorio.getColaboradores().size()) + " Colaboradores, sendo:");
-    for (TipoColaborador tipo : TipoColaborador.values()) {
-      System.out.print("[ "
-          + String.format("%02d",
-              laboratorio.getColaboradores().stream().filter(colaborador -> colaborador.getTipo() == tipo).count())
-          + " ] " + tipo.getDescricao() + "  ");
-    }
-
-    System.out.println();
-    System.out.println();
-
-    System.out.println(" - " + String.format("%02d", laboratorio.getProjetos().size()) + " Projetos, sendo:");
-
-    System.out.print("[ " + String.format("%02d",
-        laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getElaboracao()).count())
-        + " ] Em Elaboracao ");
-
-    System.out.print("[ "
-        + String.format("%02d",
-            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getAndamento()).count())
-        + " ] Em Andamento ");
-
-    System.out.print("[ "
-        + String.format("%02d",
-            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getConcluido()).count())
-        + " ] Concluido ");
-
-    System.out.println();
-    System.out.println();
-
-    System.out.println(
-        " - " + String.format("%02d", laboratorio.getProducoesAcademicas().size()) + " Producoes Academicas, sendo:");
-    for (TipoProducao tipo : TipoProducao.values()) {
-      System.out.print("[ "
-          + String.format("%02d",
-              laboratorio.getProducoesAcademicas().stream()
-                  .filter(producaoAcademica -> producaoAcademica.getTipo() == tipo).count())
-          + " ] " + tipo.getDescricao() + "  ");
-    }
-
-    System.out.println();
-  }
-
-  public static void relatorioColaboradores(Laboratorio laboratorio) {
-    System.out.println("O laboratorio " + laboratorio.getNome() + " possui atualmente "
-        + String.format("%02d", laboratorio.getColaboradores().size()) + " colaboradores, listados abaixo:");
-
-    System.out.println();
-
-    for (TipoColaborador tipo : TipoColaborador.values()) {
-      System.out.print("[ "
-          + String.format("%02d",
-              laboratorio.getColaboradores().stream().filter(colaborador -> colaborador.getTipo() == tipo).count())
-          + " ] " + tipo.getDescricao() + "  ");
-    }
-
-    System.out.println();
-    System.out.println();
-    System.out.println("  ID  |     Tipo      |  Nome");
-    System.out.println("--------------------------------------");
-
-    laboratorio.getColaboradores()
-        .forEach(colaborador -> System.out.println("  " + String.format("%02d", colaborador.getId()) + "  |  "
-            + String.format("%-13s", colaborador.getTipo().getDescricao()) + "|  " + colaborador.getNome()));
-  }
-
-  public static void relatorioProjetos(Laboratorio laboratorio) {
-    System.out.println("O laboratorio " + laboratorio.getNome() + " possui atualmente "
-        + String.format("%02d", laboratorio.getProjetos().size()) + " projetos, listados abaixo:");
-
-    System.out.println();
-
-    System.out.print("[ " + String.format("%02d",
-        laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getElaboracao()).count())
-        + " ] Em Elaboracao ");
-
-    System.out.print("[ "
-        + String.format("%02d",
-            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getAndamento()).count())
-        + " ] Em Andamento ");
-
-    System.out.print("[ "
-        + String.format("%02d",
-            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getConcluido()).count())
-        + " ] Concluido ");
-
-    System.out.println();
-    System.out.println();
-    System.out.println("  ID  |     Status      |  Titulo");
-    System.out.println("--------------------------------------");
-
-    laboratorio.getProjetos().forEach(projeto -> System.out.println("  " + String.format("%02d", projeto.getId())
-        + "  |  " + String.format("%-15s", projeto.getStatus().getDescricao()) + "|  " + projeto.getTitulo()));
-  }
-
-  public static void relatorioProducaoAcademica(Laboratorio laboratorio) {
-    System.out.println("O laboratorio " + laboratorio.getNome() + " possui atualmente "
-        + String.format("%02d", laboratorio.getProducoesAcademicas().size())
-        + " producoes academicas, listadas abaixo:");
-
-    System.out.println();
-
-    for (TipoProducao tipo : TipoProducao.values()) {
-      System.out.print("[ "
-          + String.format("%02d",
-              laboratorio.getProducoesAcademicas().stream()
-                  .filter(producaoAcademica -> producaoAcademica.getTipo() == tipo).count())
-          + " ] " + tipo.getDescricao() + "  ");
-    }
-
-    System.out.println();
-    System.out.println();
-    System.out.println("  ID  |     Tipo     |  Ano   |  Titulo");
-    System.out.println("---------------------------------------");
-
-    laboratorio.getProducoesAcademicas()
-        .forEach(producaoAcademica -> System.out.println("  " + String.format("%02d", producaoAcademica.getId())
-            + "  |  " + String.format("%-12s", producaoAcademica.getTipo().getDescricao()) + "|  "
-            + producaoAcademica.getAnoPublicacao() + "  |  " + producaoAcademica.getTitulo()));
-  }
 }

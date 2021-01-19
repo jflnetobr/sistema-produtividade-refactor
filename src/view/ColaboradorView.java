@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import src.model.*;
 import src.util.Util;
+import src.view.reports.ColaboradorReport;
+import src.view.reports.Relatorio;
 
 public class ColaboradorView {
   public static void menuColaboradores(Laboratorio lab, Scanner scanner) {
@@ -83,7 +85,8 @@ public class ColaboradorView {
           break;
         case "3":
           Util.clrscr();
-          LaboratorioView.relatorioColaboradores(lab);
+          Relatorio relatorio = new Relatorio(new ColaboradorReport(lab));
+          relatorio.execute();
           System.out.println();
           System.out.println("Pressione ENTER para continuar...");
           scanner.nextLine();

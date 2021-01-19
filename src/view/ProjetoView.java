@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import src.model.*;
 import src.model.enums.*;
 import src.util.Util;
+import src.view.reports.ProjetoReport;
+import src.view.reports.Relatorio;
 
 public class ProjetoView {
   public static void menuProjetos(Laboratorio lab, Scanner scanner) {
@@ -131,7 +133,8 @@ public class ProjetoView {
           break;
         case "3":
           Util.clrscr();
-          LaboratorioView.relatorioProjetos(lab);
+          Relatorio relatorio = new Relatorio(new ProjetoReport(lab));
+          relatorio.execute();
           System.out.println();
           System.out.println("Pressione ENTER para continuar...");
           scanner.nextLine();

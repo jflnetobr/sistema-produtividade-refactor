@@ -8,6 +8,8 @@ import src.model.*;
 import src.model.enums.TipoColaborador;
 import src.model.enums.TipoProducao;
 import src.util.Util;
+import src.view.reports.ProducaoAcademicaReport;
+import src.view.reports.Relatorio;
 
 public class ProducaoAcademicaView {
   public static void menuProducoesAcademicas(Laboratorio lab, Scanner scanner) {
@@ -156,7 +158,8 @@ public class ProducaoAcademicaView {
           break;
         case "3":
           Util.clrscr();
-          LaboratorioView.relatorioProducaoAcademica(lab);
+          Relatorio relatorio = new Relatorio(new ProducaoAcademicaReport(lab));
+          relatorio.execute();
           System.out.println();
           System.out.println("Pressione ENTER para continuar...");
           scanner.nextLine();
