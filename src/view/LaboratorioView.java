@@ -6,10 +6,14 @@ import src.model.*;
 import src.util.Util;
 import src.view.reports.*;
 
+/*
+* Nesta classe implementam-se os padrões:
+* - Extract Method
+* - Strategy
+*/
+
 public class LaboratorioView {
   public static void menuRelatorios(Laboratorio lab, Scanner scanner) {
-    Relatorio relatorio;
-
     Util.clrscr();
 
     loop: while (true) {
@@ -34,40 +38,16 @@ public class LaboratorioView {
 
       switch (op) {
         case "1":
-          Util.clrscr();
-          relatorio = new Relatorio(new LaboratorioReport(lab));
-          relatorio.execute();
-          System.out.println();
-          System.out.println("Pressione ENTER para continuar...");
-          scanner.nextLine();
-          Util.clrscr();
+          executaRelatorio(new Relatorio(new LaboratorioReport(lab)), scanner);
           break;
         case "2":
-          Util.clrscr();
-          relatorio = new Relatorio(new ColaboradorReport(lab));
-          relatorio.execute();
-          System.out.println();
-          System.out.println("Pressione ENTER para continuar...");
-          scanner.nextLine();
-          Util.clrscr();
+          executaRelatorio(new Relatorio(new ColaboradorReport(lab)), scanner);
           break;
         case "3":
-          Util.clrscr();
-          relatorio = new Relatorio(new ProjetoReport(lab));
-          relatorio.execute();
-          System.out.println();
-          System.out.println("Pressione ENTER para continuar...");
-          scanner.nextLine();
-          Util.clrscr();
+          executaRelatorio(new Relatorio(new ProjetoReport(lab)), scanner);
           break;
         case "4":
-          Util.clrscr();
-          relatorio = new Relatorio(new ProducaoAcademicaReport(lab));
-          relatorio.execute();
-          System.out.println();
-          System.out.println("Pressione ENTER para continuar...");
-          scanner.nextLine();
-          Util.clrscr();
+          executaRelatorio(new Relatorio(new ProducaoAcademicaReport(lab)), scanner);
           break;
         case "5":
           break loop;
@@ -80,4 +60,12 @@ public class LaboratorioView {
 
   }
 
+  public static void executaRelatorio(Relatorio relatorio, Scanner scanner) {
+    Util.clrscr();
+    relatorio.execute();
+    System.out.println();
+    System.out.println("Pressione ENTER para continuar...");
+    scanner.nextLine();
+    Util.clrscr();
+  }
 }

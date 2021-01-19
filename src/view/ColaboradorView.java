@@ -84,13 +84,7 @@ public class ColaboradorView {
           }
           break;
         case "3":
-          Util.clrscr();
-          Relatorio relatorio = new Relatorio(new ColaboradorReport(lab));
-          relatorio.execute();
-          System.out.println();
-          System.out.println("Pressione ENTER para continuar...");
-          scanner.nextLine();
-          Util.clrscr();
+          LaboratorioView.executaRelatorio(new Relatorio(new ColaboradorReport(lab)), scanner);
           break;
         case "4":
           break loop;

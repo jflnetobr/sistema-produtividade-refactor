@@ -132,13 +132,7 @@ public class ProjetoView {
           }
           break;
         case "3":
-          Util.clrscr();
-          Relatorio relatorio = new Relatorio(new ProjetoReport(lab));
-          relatorio.execute();
-          System.out.println();
-          System.out.println("Pressione ENTER para continuar...");
-          scanner.nextLine();
-          Util.clrscr();
+          LaboratorioView.executaRelatorio(new Relatorio(new ProjetoReport(lab)), scanner);
           break;
         case "4":
           break loop;
