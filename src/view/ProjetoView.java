@@ -188,7 +188,7 @@ public class ProjetoView {
           break;
         case "2":
           Util.clrscr();
-          if (projeto.getStatus() == Status.E) {
+          if (projeto.getStatus() == projeto.getElaboracao()) {
             menuAlocarColaboradores(lab, scanner, projeto);
           } else {
             Util.clrscr();
@@ -198,7 +198,7 @@ public class ProjetoView {
           break;
         case "3":
           Util.clrscr();
-          if (projeto.getStatus() == Status.A) {
+          if (projeto.getStatus() == projeto.getAndamento()) {
             menuAssociarPublicacao(lab, scanner, projeto);
           } else {
             Util.clrscr();
@@ -357,7 +357,7 @@ public class ProjetoView {
     System.out.println(" - Valor Financiado: R$ " + projeto.getValorFinanciado());
     System.out.println();
     System.out.println(" - Objetivo: ");
-    
+
     System.out.println(projeto.getObjetivo());
     System.out.println();
     System.out.println(" - Descricao: ");

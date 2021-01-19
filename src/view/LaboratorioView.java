@@ -92,12 +92,20 @@ public class LaboratorioView {
     System.out.println();
 
     System.out.println(" - " + String.format("%02d", laboratorio.getProjetos().size()) + " Projetos, sendo:");
-    for (Status status : Status.values()) {
-      System.out.print("[ "
-          + String.format("%02d",
-              laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == status).count())
-          + " ] " + status.getDescricao() + "  ");
-    }
+
+    System.out.print("[ " + String.format("%02d",
+        laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getElaboracao()).count())
+        + " ] Em Elaboracao ");
+
+    System.out.print("[ "
+        + String.format("%02d",
+            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getAndamento()).count())
+        + " ] Em Andamento ");
+
+    System.out.print("[ "
+        + String.format("%02d",
+            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getConcluido()).count())
+        + " ] Concluido ");
 
     System.out.println();
     System.out.println();
@@ -144,12 +152,19 @@ public class LaboratorioView {
 
     System.out.println();
 
-    for (Status status : Status.values()) {
-      System.out.print("[ "
-          + String.format("%02d",
-              laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == status).count())
-          + " ] " + status.getDescricao() + "  ");
-    }
+    System.out.print("[ " + String.format("%02d",
+        laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getElaboracao()).count())
+        + " ] Em Elaboracao ");
+
+    System.out.print("[ "
+        + String.format("%02d",
+            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getAndamento()).count())
+        + " ] Em Andamento ");
+
+    System.out.print("[ "
+        + String.format("%02d",
+            laboratorio.getProjetos().stream().filter(projeto -> projeto.getStatus() == projeto.getConcluido()).count())
+        + " ] Concluido ");
 
     System.out.println();
     System.out.println();

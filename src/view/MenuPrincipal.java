@@ -32,6 +32,7 @@ public class MenuPrincipal {
     Util.clrscr();
 
     loop: while (true) {
+      System.out.println("Laboratorio: " + lab.getNome() + " / Instituicao: " + lab.getInstituicao());
       System.out.println("Ola " + lab.getNomeAdm() + ", escolha uma opcao para continuar:");
 
       System.out.println();
