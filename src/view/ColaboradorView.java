@@ -32,9 +32,9 @@ public class ColaboradorView {
       System.out.print(" - Digite sua opcao: ");
       String op = scanner.nextLine();
 
-      switch (op) {
-        case "1":
-          try {
+      try {
+        switch (op) {
+          case "1":
             Util.clrscr();
             System.out.println("Para cadastrar um novo colaborador, informe os dados pedidos:");
 
@@ -53,48 +53,50 @@ public class ColaboradorView {
             Util.clrscr();
             System.out.println("Colaborador criado com sucesso!");
             System.out.println();
-          } catch (IntercurrenceException e) {
-            System.out.println(e.getMessage());
-            System.out.println();
-          }
-          break;
-        case "2":
-          Util.clrscr();
-          if (lab.getColaboradores().size() > 0) {
-            System.out.print(" - Digite o ID do colaborador que deseja emitir o relatorio: ");
-            String op2 = scanner.nextLine();
+            break;
+          case "2":
+            Util.clrscr();
+            if (lab.getColaboradores().size() > 0) {
+              System.out.print(" - Digite o ID do colaborador que deseja emitir o relatorio: ");
+              String op2 = scanner.nextLine();
 
-            if (op2.matches("-?\\d+")) {
-              if (Integer.parseInt(op2) <= lab.getColaboradores().size() && Integer.parseInt(op2) > 0) {
-                Util.clrscr();
-                relatorio(lab.getColaborador(Integer.parseInt(op2)));
-                System.out.println();
-                System.out.println("Pressione ENTER para continuar...");
-                scanner.nextLine();
-                Util.clrscr();
+              if (op2.matches("-?\\d+")) {
+                if (Integer.parseInt(op2) <= lab.getColaboradores().size() && Integer.parseInt(op2) > 0) {
+                  Util.clrscr();
+                  relatorio(lab.getColaborador(Integer.parseInt(op2)));
+                  System.out.println();
+                  System.out.println("Pressione ENTER para continuar...");
+                  scanner.nextLine();
+                  Util.clrscr();
+                } else {
+                  Util.clrscr();
+                  throw new IntercurrenceException("O ID informado nao pertence a nenhum colaborador");
+                }
               } else {
-                Util.clrscr();
-                System.out.println("O ID informado nao pertence a nenhum colaborador");
-                System.out.println();
+                throw new IntercurrenceException("ID invalido! Tente novamente");
               }
             } else {
-              System.out.println("ID invalido! Tente novamente");
-              System.out.println();
+              throw new IntercurrenceException("Nao existem colaboradores cadastrados");
             }
-          } else {
-            System.out.println("Nao existem colaboradores cadastrados");
+            break;
+          case "3":
+            LaboratorioView.executaRelatorio(new Relatorio(new ColaboradorReport(lab)), scanner);
+            break;
+          case "4":
+            break loop;
+          default:
+            Util.clrscr();
+            System.out.println("Opcao invalida! Tente novamente");
             System.out.println();
-          }
-          break;
-        case "3":
-          LaboratorioView.executaRelatorio(new Relatorio(new ColaboradorReport(lab)), scanner);
-          break;
-        case "4":
-          break loop;
-        default:
-          Util.clrscr();
-          System.out.println("Opcao invalida! Tente novamente");
-          System.out.println();
+        }
+      } catch (IntercurrenceException e) {
+        Util.clrscr();
+        System.out.println(e.getMessage());
+        System.out.println();
+      } catch (Exception e) {
+        Util.clrscr();
+        System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
+        System.out.println();
       }
     }
 

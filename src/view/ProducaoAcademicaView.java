@@ -34,27 +34,27 @@ public class ProducaoAcademicaView {
       System.out.print(" - Digite sua opcao: ");
       String op = scanner.nextLine();
 
-      switch (op) {
-        case "1":
-          Util.clrscr();
+      try {
+        switch (op) {
+          case "1":
+            Util.clrscr();
 
-          System.out.println("Escolha uma opcao para continuar:");
+            System.out.println("Escolha uma opcao para continuar:");
 
-          System.out.println();
+            System.out.println();
 
-          System.out.println(" [ 1 ] Cadastrar publicacao");
-          System.out.println(" [ 2 ] Cadastrar orientacao");
+            System.out.println(" [ 1 ] Cadastrar publicacao");
+            System.out.println(" [ 2 ] Cadastrar orientacao");
 
-          System.out.println();
+            System.out.println();
 
-          System.out.print(" - Digite sua opcao: ");
-          String op2 = scanner.nextLine();
+            System.out.print(" - Digite sua opcao: ");
+            String op2 = scanner.nextLine();
 
-          String titulo, anoPublicacao;
+            String titulo, anoPublicacao;
 
-          Util.clrscr();
+            Util.clrscr();
 
-          try {
             switch (op2) {
               case "1":
                 System.out.println("Para cadastrar uma nova publicacao, informe os dados pedidos:");
@@ -80,14 +80,11 @@ public class ProducaoAcademicaView {
                     System.out.println("Pressione ENTER para continuar...");
                     scanner.nextLine();
                   } else {
-                    System.out.println("O ID informado nao pertence a nenhum projeto");
-                    System.out.println();
+                    throw new IntercurrenceException("O ID informado nao pertence a nenhum projeto");
                   }
                 } else {
-                  System.out.println("ID de projeto invalido! Tente novamente");
-                  System.out.println();
+                  throw new IntercurrenceException("ID de projeto invalido! Tente novamente");
                 }
-
                 menuAdicionarAutores(lab, scanner,
                     (Publicacao) lab.getProducaoAcademica(lab.getProducoesAcademicas().size()));
                 break;
@@ -115,7 +112,6 @@ public class ProducaoAcademicaView {
                   throw new IntercurrenceException(
                       "Ainda nao existem professores cadastrados. Cadastre um professor para continuar");
                 }
-
                 break;
               default:
                 throw new IntercurrenceException("Opcao invalida! Tente novamente");
@@ -124,48 +120,48 @@ public class ProducaoAcademicaView {
             Util.clrscr();
             System.out.println("Producao academica criada com sucesso!");
             System.out.println();
-          } catch (IntercurrenceException e) {
-            System.out.println(e.getMessage());
-            System.out.println();
-          }
-          break;
-        case "2":
-          Util.clrscr();
-          if (lab.getProducoesAcademicas().size() > 0) {
-            System.out.print(" - Digite o ID da producao academica que deseja emitir o relatorio: ");
-            String op3 = scanner.nextLine();
+            break;
+          case "2":
+            Util.clrscr();
+            if (lab.getProducoesAcademicas().size() > 0) {
+              System.out.print(" - Digite o ID da producao academica que deseja emitir o relatorio: ");
+              String op3 = scanner.nextLine();
 
-            if (op3.matches("-?\\d+")) {
-              if (Integer.parseInt(op3) <= lab.getProducoesAcademicas().size() && Integer.parseInt(op3) > 0) {
-                Util.clrscr();
-                relatorio(lab.getProducaoAcademica(Integer.parseInt(op3)));
-                System.out.println();
-                System.out.println("Pressione ENTER para continuar...");
-                scanner.nextLine();
-                Util.clrscr();
+              if (op3.matches("-?\\d+")) {
+                if (Integer.parseInt(op3) <= lab.getProducoesAcademicas().size() && Integer.parseInt(op3) > 0) {
+                  Util.clrscr();
+                  relatorio(lab.getProducaoAcademica(Integer.parseInt(op3)));
+                  System.out.println();
+                  System.out.println("Pressione ENTER para continuar...");
+                  scanner.nextLine();
+                  Util.clrscr();
+                } else {
+                  Util.clrscr();
+                  throw new IntercurrenceException("O ID informado nao pertence a nenhuma producao academica");
+                }
               } else {
-                Util.clrscr();
-                System.out.println("O ID informado nao pertence a nenhuma producao academica");
-                System.out.println();
+                throw new IntercurrenceException("ID invalido! Tente novamente");
               }
             } else {
-              System.out.println("ID invalido! Tente novamente");
-              System.out.println();
+              throw new IntercurrenceException("Nao existem producoes academicas cadastradas");
             }
-          } else {
-            System.out.println("Nao existem producoes academicas cadastradas");
-            System.out.println();
-          }
-          break;
-        case "3":
-          LaboratorioView.executaRelatorio(new Relatorio(new ProducaoAcademicaReport(lab)), scanner);
-          break;
-        case "4":
-          break loop;
-        default:
-          Util.clrscr();
-          System.out.println("Opcao invalida! Tente novamente");
-          System.out.println();
+            break;
+          case "3":
+            LaboratorioView.executaRelatorio(new Relatorio(new ProducaoAcademicaReport(lab)), scanner);
+            break;
+          case "4":
+            break loop;
+          default:
+            throw new IntercurrenceException("Opcao invalida! Tente novamente");
+        }
+      } catch (IntercurrenceException e) {
+        Util.clrscr();
+        System.out.println(e.getMessage());
+        System.out.println();
+      } catch (Exception e) {
+        Util.clrscr();
+        System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
+        System.out.println();
       }
     }
 
@@ -199,27 +195,30 @@ public class ProducaoAcademicaView {
           }
         }
       } else {
-        Util.clrscr();
-        System.out.println(
+        throw new IntercurrenceException(
             "Nao existem colaboradores cadastrados. Cadastre colaboradores antes de associar a esta publicacao.");
-        System.out.println();
       }
     } catch (IntercurrenceException e) {
+      Util.clrscr();
       System.out.println(e.getMessage());
+      System.out.println();
+    } catch (Exception e) {
+      Util.clrscr();
+      System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
       System.out.println();
     }
   }
 
   public static void menuAdicionarOrientados(Laboratorio lab, Scanner scanner, Orientacao orientacao) {
-    if (lab.getColaboradores().size() > 0) {
-      loopOrientados: while (true) {
-        System.out.println();
+    try {
+      if (lab.getColaboradores().size() > 0) {
+        loopOrientados: while (true) {
+          System.out.println();
 
-        System.out.print(
-            " - Digite o ID de um orientado (que nao seja professor) para associar a orientacao ou P para encerrar: ");
-        String op = scanner.nextLine();
+          System.out.print(
+              " - Digite o ID de um orientado (que nao seja professor) para associar a orientacao ou P para encerrar: ");
+          String op = scanner.nextLine();
 
-        try {
           switch (op) {
             case "P":
               Util.clrscr();
@@ -237,15 +236,18 @@ public class ProducaoAcademicaView {
                 throw new IntercurrenceException("Opcao invalida! Tente novamente");
               }
           }
-        } catch (IntercurrenceException e) {
-          System.out.println(e.getMessage());
-          System.out.println();
         }
+      } else {
+        throw new IntercurrenceException(
+            "Nao existem colaboradores cadastrados. Cadastre colaboradores antes de associar a esta orientacao.");
       }
-    } else {
+    } catch (IntercurrenceException e) {
       Util.clrscr();
-      System.out.println(
-          "Nao existem colaboradores cadastrados. Cadastre colaboradores antes de associar a esta orientacao.");
+      System.out.println(e.getMessage());
+      System.out.println();
+    } catch (Exception e) {
+      Util.clrscr();
+      System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
       System.out.println();
     }
   }

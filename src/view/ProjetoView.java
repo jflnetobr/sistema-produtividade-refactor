@@ -113,8 +113,7 @@ public class ProjetoView {
                 if (Integer.parseInt(op2) <= lab.getProjetos().size() && Integer.parseInt(op2) > 0) {
                   menuGerenciarProjetoExistente(lab, scanner, lab.getProjeto(Integer.parseInt(op2)));
                 } else {
-                  Util.clrscr();
-                  System.out.println("O ID informado nao pertence a nenhum projeto");
+                  throw new IntercurrenceException("O ID informado nao pertence a nenhum projeto");
                 }
               } else {
                 throw new IntercurrenceException("ID invalido! Tente novamente");
@@ -132,7 +131,12 @@ public class ProjetoView {
             throw new IntercurrenceException("Opcao invalida! Tente novamente");
         }
       } catch (IntercurrenceException e) {
+        Util.clrscr();
         System.out.println(e.getMessage());
+        System.out.println();
+      } catch (Exception e) {
+        Util.clrscr();
+        System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
         System.out.println();
       }
     }
@@ -240,7 +244,12 @@ public class ProjetoView {
             throw new IntercurrenceException("Opcao invalida! Tente novamente");
         }
       } catch (IntercurrenceException e) {
+        Util.clrscr();
         System.out.println(e.getMessage());
+        System.out.println();
+      } catch (Exception e) {
+        Util.clrscr();
+        System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
         System.out.println();
       }
     }
@@ -278,7 +287,12 @@ public class ProjetoView {
             "Nao existem colaboradores cadastrados. Cadastre colaboradores antes de alocar neste projeto.");
       }
     } catch (IntercurrenceException e) {
+      Util.clrscr();
       System.out.println(e.getMessage());
+      System.out.println();
+    } catch (Exception e) {
+      Util.clrscr();
+      System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
       System.out.println();
     }
   }
@@ -320,7 +334,12 @@ public class ProjetoView {
             "Nao existem publicacoes cadastradas. Cadastre publicacoes antes de associar a este projeto.");
       }
     } catch (IntercurrenceException e) {
+      Util.clrscr();
       System.out.println(e.getMessage());
+      System.out.println();
+    } catch (Exception e) {
+      Util.clrscr();
+      System.out.println("Nao foi possivel completar a operacao. Revise os dados informados e tente novamente");
       System.out.println();
     }
   }
