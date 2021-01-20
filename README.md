@@ -22,39 +22,40 @@ Os padrões foram implementados em:
 
 ### Chain Constructors
 
-#### Commit: https://github.com/jflnetobr/sistema-produtividade-refactor/commit/f1cbcd92bf0b1acfbfff82bc9fe2b2c488725c4c
+#### Commit: [f1cbcd9](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/f1cbcd92bf0b1acfbfff82bc9fe2b2c488725c4c)
 
 - Classe Projeto 
 
 ### State
-#### Commits: https://github.com/jflnetobr/sistema-produtividade-refactor/commit/112d659b96a0fe83a925c44de92f79100fed9e5e e https://github.com/jflnetobr/sistema-produtividade-refactor/commit/38b0fd071207f571e1f33684a7c677f611c0993e
+#### Commits: [112d659](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/112d659b96a0fe83a925c44de92f79100fed9e5e) e [38b0fd0](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/38b0fd071207f571e1f33684a7c677f611c0993e)
 
 - Classe Projeto 
 
 Refletiu em:
 
- - Criação de arquivos no diretório states (https://github.com/jflnetobr/sistema-produtividade-refactor/tree/main/src/model/states)
+ - Criação de arquivos no diretório [states](https://github.com/jflnetobr/sistema-produtividade-refactor/tree/main/src/model/states)
  - Exclusão do Enum de status
  - Classe LaboratorioView
  - Classe ManuPrincipal
  - Classe ProjetoView
 
 ### Strategy
-#### Commit: https://github.com/jflnetobr/sistema-produtividade-refactor/commit/ce0141100e974cde5bd6ab929bff90cb78140ea7
+#### Commit: [ce01411](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/ce0141100e974cde5bd6ab929bff90cb78140ea7)
 
 - Classe LaboratorioView
 
 Refletiu em:
 
- - Criação de arquivos no diretório reports (https://github.com/jflnetobr/sistema-produtividade-refactor/tree/main/src/view/reports)
+ - Criação de arquivos no diretório [reports](https://github.com/jflnetobr/sistema-produtividade-refactor/tree/main/src/view/reports)
  - Classe ColaboradorView
  - Classe ProducaoAcademicaView
  - Classe ProjetoView
 
 ### Extract Method
-#### Commits: https://github.com/jflnetobr/sistema-produtividade-refactor/commit/a495f8883313d351d4a6d35179b0a760a674019e e https://github.com/jflnetobr/sistema-produtividade-refactor/commit/8f7f1950b0355b4e14e48ea3db0286760d6b85a3
+#### Commits: [a495f88](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/a495f8883313d351d4a6d35179b0a760a674019e) e [8f7f195](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/8f7f1950b0355b4e14e48ea3db0286760d6b85a3)
 
 **Emissão de relatório:**
+
 Implementado em:
 
 - Classe LaboratorioView
@@ -66,6 +67,7 @@ Refletiu em:
  - ClasseProjetoView
  
 **Formatação e parse de data:**
+
 Implementado em:
 
 - Classe Util 
@@ -78,13 +80,13 @@ Refletiu em:
  - Classe ProjetoView
 
 ## Tratamento de exceções
-#### Commits: https://github.com/jflnetobr/sistema-produtividade-refactor/commit/46ab76cfced26548adc561e0294b93b8808461c8, https://github.com/jflnetobr/sistema-produtividade-refactor/commit/b7af2d1d7d6c4aeb6f60406e3458579908681f14 e https://github.com/jflnetobr/sistema-produtividade-refactor/commit/13f0db839aa76092e5571db09b801156640dfe9f
+#### Commits: [46ab76c](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/46ab76cfced26548adc561e0294b93b8808461c8), [b7af2d1](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/b7af2d1d7d6c4aeb6f60406e3458579908681f14) e [13f0db8](https://github.com/jflnetobr/sistema-produtividade-refactor/commit/13f0db839aa76092e5571db09b801156640dfe9f)
 
  - Implementação de classe de exceção própria (IntercurrenceException) para intercorrências, como por exemplo, id não presente no sistema, colaborador não é do tipo necessário, entre outros. Anteriormente esse tipo de situação era tratado retornarndo uma String com o erro e considerando que quando fosse retornado "" não tinham ocorrido erros. Com a criação da exceção o código ficou muito mais limpo e melhor de entender.
  - Tratamento de exceções no uso de ParseInt e outros.
 
 Classe de Exceção implementada:
- - IntercurrenceException (https://github.com/jflnetobr/sistema-produtividade-refactor/blob/main/src/util/IntercurrenceException.java)
+ - [IntercurrenceException](https://github.com/jflnetobr/sistema-produtividade-refactor/blob/main/src/util/IntercurrenceException.java)
  
 Classes afetadas:
 
