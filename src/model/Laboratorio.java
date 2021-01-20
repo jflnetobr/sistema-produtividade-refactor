@@ -126,8 +126,9 @@ public class Laboratorio {
       } catch (Exception e) {
         throw new IntercurrenceException("Nao foi possivel criar o projeto. Voce informou uma data invalida!");
       }
+    } else {
+      throw new IntercurrenceException("O responsavel informado nao e um professor");
     }
-    throw new IntercurrenceException("O responsavel informado nao e um professor");
   }
 
   public void criarPublicacao(String titulo, int anoPublicacao, String nomeConferencia) {
