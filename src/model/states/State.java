@@ -2,13 +2,14 @@ package src.model.states;
 
 import src.model.Colaborador;
 import src.model.Publicacao;
+import src.util.IntercurrenceException;
 
 public interface State {
   public String getDescricao();
 
-  public String avancaStatus();
+  public void avancaStatus() throws IntercurrenceException;
 
-  public String alocaParticipante(Colaborador participante);
+  public void alocaParticipante(Colaborador participante) throws IntercurrenceException;
 
-  public String associaPublicacao(Publicacao publicacao);
+  public void associaPublicacao(Publicacao publicacao) throws IntercurrenceException;
 }

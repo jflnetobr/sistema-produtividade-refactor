@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import src.model.enums.*;
-import src.util.Util;
+import src.util.*;
 
 public class Laboratorio {
   private String nome;
@@ -80,7 +80,7 @@ public class Laboratorio {
     return producoesAcademicas.get(id - 1);
   }
 
-  public String criarColaborador(String nome, String email, int tipo) {
+  public void criarColaborador(String nome, String email, int tipo) throws IntercurrenceException {
     TipoColaborador t;
 
     switch (tipo) {
@@ -100,24 +100,22 @@ public class Laboratorio {
         t = TipoColaborador.Pesq;
         break;
       default:
-        return "Tipo informado invalido!";
+        throw new IntercurrenceException("Tipo informado invalido!");
     }
 
     this.colaboradores.add(new Colaborador(colaboradores.size() + 1, nome, email, t));
-
-    return "";
   }
 
-  public String criarProjetoResumido(String titulo, int idResponsavel) {
+  public void criarProjetoResumido(String titulo, int idResponsavel) throws IntercurrenceException {
     if (colaboradores.get(idResponsavel - 1).getTipo() == TipoColaborador.Prof) {
       this.projetos.add(new Projeto(projetos.size() + 1, titulo, colaboradores.get(idResponsavel - 1)));
-      return "";
+    } else {
+      throw new IntercurrenceException("O responsavel informado nao e um professor");
     }
-    return "O responsavel informado nao e um professor";
   }
 
-  public String criarProjetoCompleto(String titulo, String dataInicio, String dataTermino, String agenciaFinanciadora,
-      float valorFinanciado, String objetivo, String descricao, int idResponsavel) {
+  public void criarProjetoCompleto(String titulo, String dataInicio, String dataTermino, String agenciaFinanciadora,
+      float valorFinanciado, String objetivo, String descricao, int idResponsavel) throws IntercurrenceException {
     if (colaboradores.get(idResponsavel - 1).getTipo() == TipoColaborador.Prof) {
       try {
         Date dI = Util.parseDate(dataInicio);
@@ -125,27 +123,24 @@ public class Laboratorio {
 
         this.projetos.add(new Projeto(projetos.size() + 1, titulo, dI, dT, agenciaFinanciadora, valorFinanciado,
             objetivo, descricao, colaboradores.get(idResponsavel - 1)));
-
-        return "";
       } catch (Exception e) {
-        return "Nao foi possivel criar o projeto. Voce informou uma data invalida!";
+        throw new IntercurrenceException("Nao foi possivel criar o projeto. Voce informou uma data invalida!");
       }
     }
-    return "O responsavel informado nao e um professor";
+    throw new IntercurrenceException("O responsavel informado nao e um professor");
   }
 
-  public String criarPublicacao(String titulo, int anoPublicacao, String nomeConferencia) {
+  public void criarPublicacao(String titulo, int anoPublicacao, String nomeConferencia) {
     this.producoesAcademicas
         .add(new Publicacao(producoesAcademicas.size() + 1, titulo, anoPublicacao, nomeConferencia));
-    return "";
   }
 
-  public String criarOrientacao(String titulo, int anoPublicacao, int idOrientador) {
+  public void criarOrientacao(String titulo, int anoPublicacao, int idOrientador) throws IntercurrenceException {
     if (colaboradores.get(idOrientador - 1).getTipo() == TipoColaborador.Prof) {
       this.producoesAcademicas.add(
           new Orientacao(producoesAcademicas.size() + 1, titulo, anoPublicacao, colaboradores.get(idOrientador - 1)));
-      return "";
+    } else {
+      throw new IntercurrenceException("O orientador informado nao e um professor");
     }
-    return "O orientador informado nao e um professor";
   }
 }

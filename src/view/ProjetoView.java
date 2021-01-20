@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import src.model.*;
 import src.model.enums.*;
+import src.util.IntercurrenceException;
 import src.util.Util;
 import src.view.reports.ProjetoReport;
 import src.view.reports.Relatorio;
@@ -33,115 +34,109 @@ public class ProjetoView {
       System.out.print(" - Digite sua opcao: ");
       String op = scanner.nextLine();
 
-      switch (op) {
-        case "1":
-          Util.clrscr();
-          if (lab.getColaboradores().stream().filter(colaborador -> colaborador.getTipo() == TipoColaborador.Prof)
-              .count() > 0) {
-            System.out.println("Para cadastrar um novo projeto, informe os dados pedidos:");
-
-            System.out.println();
-
-            System.out.print(" - Titulo do projeto: ");
-            String titulo = scanner.nextLine();
-            System.out.print(" - ID do professor responsavel (numero): ");
-            String idResponsavel = scanner.nextLine();
-            System.out.print("Deseja informar os outros dados do projeto agora? (S/N): ");
-            String op2 = scanner.nextLine();
-
-            String r;
-
-            switch (op2) {
-              case "S":
-                System.out.print(" - Data de inicio do projeto: ");
-                String dataInicio = scanner.nextLine();
-                System.out.print(" - Data de termino do projeto: ");
-                String dataTermino = scanner.nextLine();
-                System.out.print(" - Agencia financiadora: ");
-                String agenciaFinanciadora = scanner.nextLine();
-                System.out.print(" - Valor financiado (apenas numeros, separe os centavos com .): R$ ");
-                String valorFinanciado = scanner.nextLine();
-                System.out.print(" - Ojetivo: ");
-                String objetivo = scanner.nextLine();
-                System.out.print(" - Descricao: ");
-                String descricao = scanner.nextLine();
-
-                if (idResponsavel.matches("-?\\d+")) {
-                  if (Integer.parseInt(idResponsavel) <= lab.getColaboradores().size()
-                      && Integer.parseInt(idResponsavel) > 0) {
-                    r = lab.criarProjetoCompleto(titulo, dataInicio, dataTermino, agenciaFinanciadora,
-                        Float.parseFloat(valorFinanciado), objetivo, descricao, Integer.parseInt(idResponsavel));
-                  } else {
-                    r = "O ID informado nao pertence a nenhum colaborador";
-                  }
-                } else {
-                  r = "Opcao invalida! Tente novamente";
-                }
-
-                if (r == "") {
-                  menuAlocarColaboradores(lab, scanner, lab.getProjeto(lab.getProjetos().size()));
-                }
-                break;
-              default:
-                if (idResponsavel.matches("-?\\d+")) {
-                  if (Integer.parseInt(idResponsavel) <= lab.getColaboradores().size()
-                      && Integer.parseInt(idResponsavel) > 0) {
-                    r = lab.criarProjetoResumido(titulo, Integer.parseInt(idResponsavel));
-                  } else {
-                    r = "O ID informado nao pertence a nenhum colaborador";
-                  }
-                } else {
-                  r = "Opcao invalida! Tente novamente";
-                }
-
-                Util.clrscr();
-            }
-
-            if (r != "") {
-              Util.clrscr();
-            }
-            System.out.println(r == "" ? "Projeto criado com sucesso!" : r);
-            System.out.println();
-          } else {
+      try {
+        switch (op) {
+          case "1":
             Util.clrscr();
-            System.out.println("Ainda nao existem professores cadastrados. Cadastre um professor para continuar");
-            System.out.println();
-          }
-          break;
-        case "2":
-          Util.clrscr();
-          if (lab.getProjetos().size() > 0) {
-            System.out.print(" - Digite o ID do projeto desejado: ");
-            String op2 = scanner.nextLine();
+            if (lab.getColaboradores().stream().filter(colaborador -> colaborador.getTipo() == TipoColaborador.Prof)
+                .count() > 0) {
+              System.out.println("Para cadastrar um novo projeto, informe os dados pedidos:");
 
-            if (op2.matches("-?\\d+")) {
-              if (Integer.parseInt(op2) <= lab.getProjetos().size() && Integer.parseInt(op2) > 0) {
-                menuGerenciarProjetoExistente(lab, scanner, lab.getProjeto(Integer.parseInt(op2)));
+              System.out.println();
+
+              System.out.print(" - Titulo do projeto: ");
+              String titulo = scanner.nextLine();
+              System.out.print(" - ID do professor responsavel (numero): ");
+              String idResponsavel = scanner.nextLine();
+              System.out.print("Deseja informar os outros dados do projeto agora? (S/N): ");
+              String op2 = scanner.nextLine();
+
+              switch (op2) {
+                case "S":
+                  System.out.print(" - Data de inicio do projeto: ");
+                  String dataInicio = scanner.nextLine();
+                  System.out.print(" - Data de termino do projeto: ");
+                  String dataTermino = scanner.nextLine();
+                  System.out.print(" - Agencia financiadora: ");
+                  String agenciaFinanciadora = scanner.nextLine();
+                  System.out.print(" - Valor financiado (apenas numeros, separe os centavos com .): R$ ");
+                  String valorFinanciado = scanner.nextLine();
+                  System.out.print(" - Ojetivo: ");
+                  String objetivo = scanner.nextLine();
+                  System.out.print(" - Descricao: ");
+                  String descricao = scanner.nextLine();
+
+                  if (idResponsavel.matches("-?\\d+")) {
+                    if (Integer.parseInt(idResponsavel) <= lab.getColaboradores().size()
+                        && Integer.parseInt(idResponsavel) > 0) {
+                      lab.criarProjetoCompleto(titulo, dataInicio, dataTermino, agenciaFinanciadora,
+                          Float.parseFloat(valorFinanciado), objetivo, descricao, Integer.parseInt(idResponsavel));
+                    } else {
+                      throw new IntercurrenceException("O ID informado nao pertence a nenhum colaborador");
+                    }
+                  } else {
+                    throw new IntercurrenceException("Opcao invalida! Tente novamente");
+                  }
+
+                  menuAlocarColaboradores(lab, scanner, lab.getProjeto(lab.getProjetos().size()));
+                  break;
+                default:
+                  if (idResponsavel.matches("-?\\d+")) {
+                    if (Integer.parseInt(idResponsavel) <= lab.getColaboradores().size()
+                        && Integer.parseInt(idResponsavel) > 0) {
+                      lab.criarProjetoResumido(titulo, Integer.parseInt(idResponsavel));
+                    } else {
+                      throw new IntercurrenceException("O ID informado nao pertence a nenhum colaborador");
+                    }
+                  } else {
+                    throw new IntercurrenceException("Opcao invalida! Tente novamente");
+                  }
+
+                  Util.clrscr();
+              }
+
+              Util.clrscr();
+              System.out.println("Projeto criado com sucesso!");
+              System.out.println();
+            } else {
+              throw new IntercurrenceException(
+                  "Ainda nao existem professores cadastrados. Cadastre um professor para continuar");
+            }
+            break;
+          case "2":
+            Util.clrscr();
+            if (lab.getProjetos().size() > 0) {
+              System.out.print(" - Digite o ID do projeto desejado: ");
+              String op2 = scanner.nextLine();
+
+              if (op2.matches("-?\\d+")) {
+                if (Integer.parseInt(op2) <= lab.getProjetos().size() && Integer.parseInt(op2) > 0) {
+                  menuGerenciarProjetoExistente(lab, scanner, lab.getProjeto(Integer.parseInt(op2)));
+                } else {
+                  Util.clrscr();
+                  System.out.println("O ID informado nao pertence a nenhum projeto");
+                }
               } else {
-                Util.clrscr();
-                System.out.println("O ID informado nao pertence a nenhum projeto");
-                System.out.println();
+                throw new IntercurrenceException("ID invalido! Tente novamente");
               }
             } else {
-              System.out.println("ID invalido! Tente novamente");
-              System.out.println();
+              throw new IntercurrenceException("Nao existem projetos cadastrados");
             }
-          } else {
-            System.out.println("Nao existem projetos cadastrados");
-            System.out.println();
-          }
-          break;
-        case "3":
-          LaboratorioView.executaRelatorio(new Relatorio(new ProjetoReport(lab)), scanner);
-          break;
-        case "4":
-          break loop;
-        default:
-          Util.clrscr();
-          System.out.println("Opcao invalida! Tente novamente");
-          System.out.println();
+            break;
+          case "3":
+            LaboratorioView.executaRelatorio(new Relatorio(new ProjetoReport(lab)), scanner);
+            break;
+          case "4":
+            break loop;
+          default:
+            throw new IntercurrenceException("Opcao invalida! Tente novamente");
+        }
+      } catch (IntercurrenceException e) {
+        System.out.println(e.getMessage());
+        System.out.println();
       }
     }
+
   }
 
   public static void menuGerenciarProjetoExistente(Laboratorio lab, Scanner scanner, Projeto projeto) {
@@ -173,162 +168,159 @@ public class ProjetoView {
       System.out.print(" - Digite sua opcao: ");
       String op = scanner.nextLine();
 
-      switch (op) {
-        case "1":
-          Util.clrscr();
-          String r = projeto.avancaStatus();
-          Util.clrscr();
-          System.out
-              .println(r == "" ? "Status alterado para " + projeto.getStatus().getDescricao() + " com sucesso!" : r);
-          System.out.println();
-          break;
-        case "2":
-          Util.clrscr();
-          if (projeto.getStatus() == projeto.getElaboracao()) {
-            menuAlocarColaboradores(lab, scanner, projeto);
-          } else {
+      try {
+        switch (op) {
+          case "1":
             Util.clrscr();
-            System.out.println("Nao e possivel alocar colaboradores: o projeto nao esta em elaboracao");
-            System.out.println();
-          }
-          break;
-        case "3":
-          Util.clrscr();
-          if (projeto.getStatus() == projeto.getAndamento()) {
-            menuAssociarPublicacao(lab, scanner, projeto);
-          } else {
+            projeto.avancaStatus();
             Util.clrscr();
-            System.out.println("Nao e possivel associar publicacoes: o projeto nao esta em andamento");
+            System.out.println("Status alterado para " + projeto.getStatus().getDescricao() + " com sucesso!");
             System.out.println();
-          }
-          break;
-        case "4":
-          Util.clrscr();
-          if (projeto.getDataInicio() == null && projeto.getDataTermino() == null
-              && projeto.getAgenciaFinanciadora() == null && projeto.getValorFinanciado() == 0
-              && projeto.getObjetivo() == null && projeto.getDescricao() == null) {
-            System.out.println("Informe os dados pedidos:");
-
-            System.out.println();
-
-            System.out.print(" - Data de inicio do projeto: ");
-            String dataInicio = scanner.nextLine();
-            System.out.print(" - Data de termino do projeto: ");
-            String dataTermino = scanner.nextLine();
-            System.out.print(" - Agencia financiadora: ");
-            String agenciaFinanciadora = scanner.nextLine();
-            System.out.print(" - Valor financiado (apenas numeros, separe os centavos com .): R$ ");
-            String valorFinanciado = scanner.nextLine();
-            System.out.print(" - Ojetivo: ");
-            String objetivo = scanner.nextLine();
-            System.out.print(" - Descricao: ");
-            String descricao = scanner.nextLine();
-
-            r = projeto.complementarDados(dataInicio, dataTermino, agenciaFinanciadora,
-                Float.parseFloat(valorFinanciado), objetivo, descricao);
-
+            break;
+          case "2":
             Util.clrscr();
-            System.out.println(r == "" ? "Dados atualizados com sucesso!" : r);
-            System.out.println();
-          } else {
+            if (projeto.getStatus() == projeto.getElaboracao()) {
+              menuAlocarColaboradores(lab, scanner, projeto);
+            } else {
+              throw new IntercurrenceException("Nao e possivel alocar colaboradores: o projeto nao esta em elaboracao");
+            }
+            break;
+          case "3":
             Util.clrscr();
-            System.out.println("As informacoes basicas do projeto ja foram cadastradas");
+            if (projeto.getStatus() == projeto.getAndamento()) {
+              menuAssociarPublicacao(lab, scanner, projeto);
+            } else {
+              throw new IntercurrenceException("Nao e possivel associar publicacoes: o projeto nao esta em andamento");
+            }
+            break;
+          case "4":
+            Util.clrscr();
+            if (projeto.getDataInicio() == null && projeto.getDataTermino() == null
+                && projeto.getAgenciaFinanciadora() == null && projeto.getValorFinanciado() == 0
+                && projeto.getObjetivo() == null && projeto.getDescricao() == null) {
+              System.out.println("Informe os dados pedidos:");
+
+              System.out.println();
+
+              System.out.print(" - Data de inicio do projeto: ");
+              String dataInicio = scanner.nextLine();
+              System.out.print(" - Data de termino do projeto: ");
+              String dataTermino = scanner.nextLine();
+              System.out.print(" - Agencia financiadora: ");
+              String agenciaFinanciadora = scanner.nextLine();
+              System.out.print(" - Valor financiado (apenas numeros, separe os centavos com .): R$ ");
+              String valorFinanciado = scanner.nextLine();
+              System.out.print(" - Ojetivo: ");
+              String objetivo = scanner.nextLine();
+              System.out.print(" - Descricao: ");
+              String descricao = scanner.nextLine();
+
+              projeto.complementarDados(dataInicio, dataTermino, agenciaFinanciadora, Float.parseFloat(valorFinanciado),
+                  objetivo, descricao);
+
+              Util.clrscr();
+              System.out.println("Dados atualizados com sucesso!");
+              System.out.println();
+            } else {
+              throw new IntercurrenceException("As informacoes basicas do projeto ja foram cadastradas");
+            }
+            break;
+          case "5":
+            Util.clrscr();
+            relatorio(projeto);
             System.out.println();
-          }
-          break;
-        case "5":
-          Util.clrscr();
-          relatorio(projeto);
-          System.out.println();
-          System.out.println("Pressione ENTER para continuar...");
-          scanner.nextLine();
-          Util.clrscr();
-          break;
-        case "6":
-          Util.clrscr();
-          break loop;
-        default:
-          Util.clrscr();
-          System.out.println("Opcao invalida! Tente novamente");
-          System.out.println();
+            System.out.println("Pressione ENTER para continuar...");
+            scanner.nextLine();
+            Util.clrscr();
+            break;
+          case "6":
+            Util.clrscr();
+            break loop;
+          default:
+            throw new IntercurrenceException("Opcao invalida! Tente novamente");
+        }
+      } catch (IntercurrenceException e) {
+        System.out.println(e.getMessage());
+        System.out.println();
       }
     }
   }
 
   public static void menuAlocarColaboradores(Laboratorio lab, Scanner scanner, Projeto projeto) {
-    if (lab.getColaboradores().size() > 0) {
-      loopColaboradores: while (true) {
-        System.out.println();
+    try {
+      if (lab.getColaboradores().size() > 0) {
+        loopColaboradores: while (true) {
+          System.out.println();
 
-        System.out.print(" - Digite o ID de um colaborador para alocar no projeto ou P para encerrar: ");
-        String op = scanner.nextLine();
+          System.out.print(" - Digite o ID de um colaborador para alocar no projeto ou P para encerrar: ");
+          String op = scanner.nextLine();
 
-        switch (op) {
-          case "P":
-            Util.clrscr();
-            break loopColaboradores;
-          default:
-            if (op.matches("-?\\d+")) {
-              String r;
-              if (Integer.parseInt(op) <= lab.getColaboradores().size() && Integer.parseInt(op) > 0) {
-                r = projeto.alocaParticipante(lab.getColaborador(Integer.parseInt(op)));
-              } else {
-                r = "O ID informado nao pertence a nenhum colaborador";
-              }
-              System.out.println();
-              System.out.println(r == "" ? "Colaborador alocado com sucesso!" : r);
-            } else {
+          switch (op) {
+            case "P":
               Util.clrscr();
-              System.out.println("Opcao invalida! Tente novamente");
-              System.out.println();
-            }
+              break loopColaboradores;
+            default:
+              if (op.matches("-?\\d+")) {
+                if (Integer.parseInt(op) <= lab.getColaboradores().size() && Integer.parseInt(op) > 0) {
+                  projeto.alocaParticipante(lab.getColaborador(Integer.parseInt(op)));
+                } else {
+                  throw new IntercurrenceException("O ID informado nao pertence a nenhum colaborador");
+                }
+                System.out.println();
+                System.out.println("Colaborador alocado com sucesso!");
+              } else {
+                throw new IntercurrenceException("Opcao invalida! Tente novamente");
+              }
+          }
         }
+      } else {
+        throw new IntercurrenceException(
+            "Nao existem colaboradores cadastrados. Cadastre colaboradores antes de alocar neste projeto.");
       }
-    } else {
-      Util.clrscr();
-      System.out
-          .println("Nao existem colaboradores cadastrados. Cadastre colaboradores antes de alocar neste projeto.");
+    } catch (IntercurrenceException e) {
+      System.out.println(e.getMessage());
       System.out.println();
     }
   }
 
   public static void menuAssociarPublicacao(Laboratorio lab, Scanner scanner, Projeto projeto) {
-    if (lab.getProducoesAcademicas().stream().filter(producaoAcademica -> producaoAcademica.getTipo() == TipoProducao.P)
-        .count() > 0) {
-      loopPublicacoes: while (true) {
-        System.out.println();
+    try {
+      if (lab.getProducoesAcademicas().stream()
+          .filter(producaoAcademica -> producaoAcademica.getTipo() == TipoProducao.P).count() > 0) {
+        loopPublicacoes: while (true) {
+          System.out.println();
 
-        System.out.print(" - Digite o ID de uma publicacao para associar ao projeto ou P para encerrar: ");
-        String op = scanner.nextLine();
+          System.out.print(" - Digite o ID de uma publicacao para associar ao projeto ou P para encerrar: ");
+          String op = scanner.nextLine();
 
-        switch (op) {
-          case "P":
-            Util.clrscr();
-            break loopPublicacoes;
-          default:
-            if (op.matches("-?\\d+")) {
-              String r;
-              if (Integer.parseInt(op) <= lab.getProducoesAcademicas().size() && Integer.parseInt(op) > 0) {
-                if (lab.getProducaoAcademica(Integer.parseInt(op)).getTipo() == TipoProducao.P) {
-                  r = projeto.associaPublicacao((Publicacao) lab.getProducaoAcademica(Integer.parseInt(op)));
-                } else {
-                  r = "O ID informado nao pertence a uma publicacao";
-                }
-              } else {
-                r = "O ID informado nao pertence a nenhuma producao academica";
-              }
-              System.out.println();
-              System.out.println(r == "" ? "Publicacao associada com sucesso!" : r);
-            } else {
+          switch (op) {
+            case "P":
               Util.clrscr();
-              System.out.println("Opcao invalida! Tente novamente");
-              System.out.println();
-            }
+              break loopPublicacoes;
+            default:
+              if (op.matches("-?\\d+")) {
+                if (Integer.parseInt(op) <= lab.getProducoesAcademicas().size() && Integer.parseInt(op) > 0) {
+                  if (lab.getProducaoAcademica(Integer.parseInt(op)).getTipo() == TipoProducao.P) {
+                    projeto.associaPublicacao((Publicacao) lab.getProducaoAcademica(Integer.parseInt(op)));
+                  } else {
+                    throw new IntercurrenceException("O ID informado nao pertence a uma publicacao");
+                  }
+                } else {
+                  throw new IntercurrenceException("O ID informado nao pertence a nenhuma producao academica");
+                }
+                System.out.println();
+                System.out.println("Publicacao associada com sucesso!");
+              } else {
+                throw new IntercurrenceException("Opcao invalida! Tente novamente");
+              }
+          }
         }
+      } else {
+        throw new IntercurrenceException(
+            "Nao existem publicacoes cadastradas. Cadastre publicacoes antes de associar a este projeto.");
       }
-    } else {
-      Util.clrscr();
-      System.out.println("Nao existem publicacoes cadastradas. Cadastre publicacoes antes de associar a este projeto.");
+    } catch (IntercurrenceException e) {
+      System.out.println(e.getMessage());
       System.out.println();
     }
   }

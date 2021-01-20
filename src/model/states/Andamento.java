@@ -1,6 +1,7 @@
 package src.model.states;
 
 import src.model.*;
+import src.util.IntercurrenceException;
 
 public class Andamento implements State {
   Projeto projeto;
@@ -13,24 +14,24 @@ public class Andamento implements State {
     return "Em Andamento";
   }
 
-  public String avancaStatus() {
+  public void avancaStatus() throws IntercurrenceException {
     if (projeto.getPublicacoes().size() > 0) {
       projeto.setStatus(projeto.getConcluido());
-      return "";
+    } else {
+      throw new IntercurrenceException("Nao existem publicacoes associadas ao projeto");
     }
-    return "Nao existem publicacoes associadas ao projeto";
   }
 
-  public String alocaParticipante(Colaborador participante) {
-    return "Nao e possivel alocar colaboradores, pois o projeto nao esta mais em elaboracao";
+  public void alocaParticipante(Colaborador participante) throws IntercurrenceException {
+    throw new IntercurrenceException("Nao e possivel alocar colaboradores, pois o projeto nao esta mais em elaboracao");
   }
 
-  public String associaPublicacao(Publicacao publicacao) {
+  public void associaPublicacao(Publicacao publicacao) throws IntercurrenceException {
     if (!projeto.getPublicacoes().contains(publicacao)) {
       projeto.adicionaPublicacao(publicacao);
       publicacao.setProjeto(projeto);
-      return "";
+    } else {
+      throw new IntercurrenceException("A publicacao informada ja esta associada ao Projeto");
     }
-    return "A publicacao informada ja esta associada ao Projeto";
   }
 }

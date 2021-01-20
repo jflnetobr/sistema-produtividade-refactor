@@ -3,6 +3,7 @@ package src.model;
 import java.util.ArrayList;
 
 import src.model.enums.TipoProducao;
+import src.util.IntercurrenceException;
 
 public class Publicacao extends ProducaoAcademica {
   private String nomeConferencia;
@@ -38,12 +39,12 @@ public class Publicacao extends ProducaoAcademica {
     this.autores = autores;
   }
 
-  public String adicionaAutor(Colaborador autor) {
+  public void adicionaAutor(Colaborador autor) throws IntercurrenceException {
     if (!autores.contains(autor)) {
       autores.add(autor);
       autor.adicionaProducaoAcademica(this);
-      return "";
+    } else {
+      throw new IntercurrenceException("O autor informado ja esta na publicacao");
     }
-    return "O autor informado ja esta na publicacao";
   }
 }

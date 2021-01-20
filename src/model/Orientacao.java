@@ -3,6 +3,7 @@ package src.model;
 import java.util.ArrayList;
 
 import src.model.enums.*;
+import src.util.IntercurrenceException;
 
 public class Orientacao extends ProducaoAcademica {
   private Colaborador orientador;
@@ -29,15 +30,16 @@ public class Orientacao extends ProducaoAcademica {
     this.orientados = orientados;
   }
 
-  public String adicionaOrientado(Colaborador orientado) {
+  public void adicionaOrientado(Colaborador orientado) throws IntercurrenceException {
     if (!orientados.contains(orientado)) {
       if (orientado.getTipo() != TipoColaborador.Prof) {
         orientados.add(orientado);
         orientado.adicionaProducaoAcademica(this);
-        return "";
+      } else {
+        throw new IntercurrenceException("O orientado nao pode ser um professor");
       }
-      return "O orientado nao pode ser um professor";
+    } else {
+      throw new IntercurrenceException("O orientado informado ja esta na orientacao");
     }
-    return "O orientado informado ja esta na orientacao";
   }
 }

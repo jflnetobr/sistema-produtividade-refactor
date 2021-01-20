@@ -5,9 +5,9 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import src.model.*;
+import src.util.*;
 import src.model.enums.TipoColaborador;
 import src.model.enums.TipoProducao;
-import src.util.Util;
 import src.view.reports.ProducaoAcademicaReport;
 import src.view.reports.Relatorio;
 
@@ -50,52 +50,14 @@ public class ProducaoAcademicaView {
           System.out.print(" - Digite sua opcao: ");
           String op2 = scanner.nextLine();
 
-          String r, titulo, anoPublicacao;
+          String titulo, anoPublicacao;
 
           Util.clrscr();
 
-          switch (op2) {
-            case "1":
-              System.out.println("Para cadastrar uma nova publicacao, informe os dados pedidos:");
-
-              System.out.println();
-
-              System.out.print(" - Titulo: ");
-              titulo = scanner.nextLine();
-              System.out.print(" - Ano de publicacao (apenas numeros): ");
-              anoPublicacao = scanner.nextLine();
-              System.out.print(" - Nome da conferencia onde foi publicada: ");
-              String nomeConferencia = scanner.nextLine();
-              System.out.print(" - ID do projeto de pesquisa associado (se nao houver, digite 0): ");
-              String idProjeto = scanner.nextLine();
-
-              r = lab.criarPublicacao(titulo, Integer.parseInt(anoPublicacao), nomeConferencia);
-
-              if (idProjeto.matches("-?\\d+")) {
-                if (Integer.parseInt(idProjeto) <= lab.getProjetos().size() && Integer.parseInt(idProjeto) > 0) {
-                  Publicacao p = (Publicacao) lab.getProducaoAcademica(lab.getProducoesAcademicas().size());
-                  System.out.println(lab.getProjeto(Integer.parseInt(idProjeto)).associaPublicacao(p));
-                  System.out.println();
-                  System.out.println("Pressione ENTER para continuar...");
-                  scanner.nextLine();
-                } else {
-                  System.out.println("O ID informado nao pertence a nenhum projeto");
-                  System.out.println();
-                }
-              } else {
-                System.out.println("ID de projeto invalido! Tente novamente");
-                System.out.println();
-              }
-
-              if (r == "") {
-                menuAdicionarAutores(lab, scanner,
-                    (Publicacao) lab.getProducaoAcademica(lab.getProducoesAcademicas().size()));
-              }
-              break;
-            case "2":
-              if (lab.getColaboradores().stream().filter(colaborador -> colaborador.getTipo() == TipoColaborador.Prof)
-                  .count() > 0) {
-                System.out.println("Para cadastrar uma nova orientacao, informe os dados pedidos:");
+          try {
+            switch (op2) {
+              case "1":
+                System.out.println("Para cadastrar uma nova publicacao, informe os dados pedidos:");
 
                 System.out.println();
 
@@ -103,30 +65,69 @@ public class ProducaoAcademicaView {
                 titulo = scanner.nextLine();
                 System.out.print(" - Ano de publicacao (apenas numeros): ");
                 anoPublicacao = scanner.nextLine();
-                System.out.print(" - ID do orientardor (deve ser um professor, informe um numero): ");
-                String idOrientador = scanner.nextLine();
+                System.out.print(" - Nome da conferencia onde foi publicada: ");
+                String nomeConferencia = scanner.nextLine();
+                System.out.print(" - ID do projeto de pesquisa associado (se nao houver, digite 0): ");
+                String idProjeto = scanner.nextLine();
 
-                r = lab.criarOrientacao(titulo, Integer.parseInt(anoPublicacao), Integer.parseInt(idOrientador));
+                lab.criarPublicacao(titulo, Integer.parseInt(anoPublicacao), nomeConferencia);
 
-                if (r == "") {
+                if (idProjeto.matches("-?\\d+")) {
+                  if (Integer.parseInt(idProjeto) <= lab.getProjetos().size() && Integer.parseInt(idProjeto) > 0) {
+                    Publicacao p = (Publicacao) lab.getProducaoAcademica(lab.getProducoesAcademicas().size());
+                    lab.getProjeto(Integer.parseInt(idProjeto)).associaPublicacao(p);
+                    System.out.println();
+                    System.out.println("Pressione ENTER para continuar...");
+                    scanner.nextLine();
+                  } else {
+                    System.out.println("O ID informado nao pertence a nenhum projeto");
+                    System.out.println();
+                  }
+                } else {
+                  System.out.println("ID de projeto invalido! Tente novamente");
+                  System.out.println();
+                }
+
+                menuAdicionarAutores(lab, scanner,
+                    (Publicacao) lab.getProducaoAcademica(lab.getProducoesAcademicas().size()));
+                break;
+              case "2":
+                if (lab.getColaboradores().stream().filter(colaborador -> colaborador.getTipo() == TipoColaborador.Prof)
+                    .count() > 0) {
+                  System.out.println("Para cadastrar uma nova orientacao, informe os dados pedidos:");
+
+                  System.out.println();
+
+                  System.out.print(" - Titulo: ");
+                  titulo = scanner.nextLine();
+                  System.out.print(" - Ano de publicacao (apenas numeros): ");
+                  anoPublicacao = scanner.nextLine();
+                  System.out.print(" - ID do orientardor (deve ser um professor, informe um numero): ");
+                  String idOrientador = scanner.nextLine();
+
+                  lab.criarOrientacao(titulo, Integer.parseInt(anoPublicacao), Integer.parseInt(idOrientador));
+
                   lab.getColaborador(Integer.parseInt(idOrientador))
                       .adicionaProducaoAcademica(lab.getProducaoAcademica(lab.getProducoesAcademicas().size()));
                   menuAdicionarOrientados(lab, scanner,
                       (Orientacao) lab.getProducaoAcademica(lab.getProducoesAcademicas().size()));
+                } else {
+                  throw new IntercurrenceException(
+                      "Ainda nao existem professores cadastrados. Cadastre um professor para continuar");
                 }
-              } else {
-                r = "Ainda nao existem professores cadastrados. Cadastre um professor para continuar";
-              }
-              break;
-            default:
-              r = "Opcao invalida! Tente novamente";
-          }
 
-          if (r != "") {
+                break;
+              default:
+                throw new IntercurrenceException("Opcao invalida! Tente novamente");
+            }
+
             Util.clrscr();
+            System.out.println("Producao academica criada com sucesso!");
+            System.out.println();
+          } catch (IntercurrenceException e) {
+            System.out.println(e.getMessage());
+            System.out.println();
           }
-          System.out.println(r == "" ? "Producao academica criada com sucesso!" : r);
-          System.out.println();
           break;
         case "2":
           Util.clrscr();
@@ -167,41 +168,44 @@ public class ProducaoAcademicaView {
           System.out.println();
       }
     }
+
   }
 
   public static void menuAdicionarAutores(Laboratorio lab, Scanner scanner, Publicacao publicacao) {
-    if (lab.getColaboradores().size() > 0) {
-      loopAutores: while (true) {
-        System.out.println();
+    try {
+      if (lab.getColaboradores().size() > 0) {
+        loopAutores: while (true) {
+          System.out.println();
 
-        System.out.print(" - Digite o ID de um autor (colaborador) para associar a publicacao ou P para encerrar: ");
-        String op = scanner.nextLine();
+          System.out.print(" - Digite o ID de um autor (colaborador) para associar a publicacao ou P para encerrar: ");
+          String op = scanner.nextLine();
 
-        switch (op) {
-          case "P":
-            Util.clrscr();
-            break loopAutores;
-          default:
-            if (op.matches("-?\\d+")) {
-              String r;
-              if (Integer.parseInt(op) <= lab.getColaboradores().size() && Integer.parseInt(op) > 0) {
-                r = publicacao.adicionaAutor(lab.getColaborador(Integer.parseInt(op)));
-              } else {
-                r = "O ID informado nao pertence a nenhum colaborador";
-              }
-              System.out.println();
-              System.out.println(r == "" ? "Autor associado com sucesso!" : r);
-            } else {
+          switch (op) {
+            case "P":
               Util.clrscr();
-              System.out.println("Opcao invalida! Tente novamente");
-              System.out.println();
-            }
+              break loopAutores;
+            default:
+              if (op.matches("-?\\d+")) {
+                if (Integer.parseInt(op) <= lab.getColaboradores().size() && Integer.parseInt(op) > 0) {
+                  publicacao.adicionaAutor(lab.getColaborador(Integer.parseInt(op)));
+                } else {
+                  throw new IntercurrenceException("O ID informado nao pertence a nenhum colaborador");
+                }
+                System.out.println();
+                System.out.println("Autor associado com sucesso!");
+              } else {
+                throw new IntercurrenceException("Opcao invalida! Tente novamente");
+              }
+          }
         }
+      } else {
+        Util.clrscr();
+        System.out.println(
+            "Nao existem colaboradores cadastrados. Cadastre colaboradores antes de associar a esta publicacao.");
+        System.out.println();
       }
-    } else {
-      Util.clrscr();
-      System.out.println(
-          "Nao existem colaboradores cadastrados. Cadastre colaboradores antes de associar a esta publicacao.");
+    } catch (IntercurrenceException e) {
+      System.out.println(e.getMessage());
       System.out.println();
     }
   }
@@ -215,25 +219,27 @@ public class ProducaoAcademicaView {
             " - Digite o ID de um orientado (que nao seja professor) para associar a orientacao ou P para encerrar: ");
         String op = scanner.nextLine();
 
-        switch (op) {
-          case "P":
-            Util.clrscr();
-            break loopOrientados;
-          default:
-            if (op.matches("-?\\d+")) {
-              String r;
-              if (Integer.parseInt(op) <= lab.getColaboradores().size() && Integer.parseInt(op) > 0) {
-                r = orientacao.adicionaOrientado(lab.getColaborador(Integer.parseInt(op)));
-              } else {
-                r = "O ID informado nao pertence a nenhum colaborador";
-              }
-              System.out.println();
-              System.out.println(r == "" ? "Orientado associado com sucesso!" : r);
-            } else {
+        try {
+          switch (op) {
+            case "P":
               Util.clrscr();
-              System.out.println("Opcao invalida! Tente novamente");
-              System.out.println();
-            }
+              break loopOrientados;
+            default:
+              if (op.matches("-?\\d+")) {
+                if (Integer.parseInt(op) <= lab.getColaboradores().size() && Integer.parseInt(op) > 0) {
+                  orientacao.adicionaOrientado(lab.getColaborador(Integer.parseInt(op)));
+                } else {
+                  throw new IntercurrenceException("O ID informado nao pertence a nenhum colaborador");
+                }
+                System.out.println();
+                System.out.println("Orientado associado com sucesso!");
+              } else {
+                throw new IntercurrenceException("Opcao invalida! Tente novamente");
+              }
+          }
+        } catch (IntercurrenceException e) {
+          System.out.println(e.getMessage());
+          System.out.println();
         }
       }
     } else {

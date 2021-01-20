@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import src.model.states.*;
-import src.util.Util;
+import src.util.*;
 
 /*
 * Nesta classe implementam-se os padrões:
@@ -169,8 +169,8 @@ public class Projeto {
     this.publicacoes.add(publicacao);
   }
 
-  public String complementarDados(String dataInicio, String dataTermino, String agenciaFinanciadora,
-      float valorFinanciado, String objetivo, String descricao) {
+  public void complementarDados(String dataInicio, String dataTermino, String agenciaFinanciadora,
+      float valorFinanciado, String objetivo, String descricao) throws IntercurrenceException {
     if (!this.isCompleto()) {
       try {
         Date dI = Util.parseDate(dataInicio);
@@ -184,24 +184,23 @@ public class Projeto {
         this.setDescricao(descricao);
 
         this.setCompleto(true);
-
-        return "";
       } catch (Exception e) {
-        return "Nao foi possivel completar as informacoes. Voce informou uma data invalida!";
+        throw new IntercurrenceException("Nao foi possivel completar as informacoes. Voce informou uma data invalida!");
       }
+    } else {
+      throw new IntercurrenceException("O Projeto ja tem as informacoes basicas");
     }
-    return "O Projeto ja tem as informacoes basicas";
   }
 
-  public String avancaStatus() {
-    return status.avancaStatus();
+  public void avancaStatus() throws IntercurrenceException {
+    status.avancaStatus();
   }
 
-  public String alocaParticipante(Colaborador participante) {
-    return status.alocaParticipante(participante);
+  public void alocaParticipante(Colaborador participante) throws IntercurrenceException {
+    status.alocaParticipante(participante);
   }
 
-  public String associaPublicacao(Publicacao publicacao) {
-    return status.associaPublicacao(publicacao);
+  public void associaPublicacao(Publicacao publicacao) throws IntercurrenceException {
+    status.associaPublicacao(publicacao);
   }
 }

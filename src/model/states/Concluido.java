@@ -3,6 +3,7 @@ package src.model.states;
 import src.model.Colaborador;
 import src.model.Projeto;
 import src.model.Publicacao;
+import src.util.IntercurrenceException;
 
 public class Concluido implements State {
   Projeto projeto;
@@ -15,15 +16,15 @@ public class Concluido implements State {
     return "Em Concluido";
   }
 
-  public String avancaStatus() {
-    return "O projeto ja foi concluido";
+  public void avancaStatus() throws IntercurrenceException {
+    throw new IntercurrenceException("O projeto ja foi concluido");
   }
 
-  public String alocaParticipante(Colaborador participante) {
-    return "Nao e possivel alocar colaboradores, pois o projeto nao esta mais em elaboracao";
+  public void alocaParticipante(Colaborador participante) throws IntercurrenceException {
+    throw new IntercurrenceException("Nao e possivel alocar colaboradores, pois o projeto nao esta mais em elaboracao");
   }
 
-  public String associaPublicacao(Publicacao publicacao) {
-    return "Nao foi possivel associar a publicacao, pois o projeto nao esta em andamento";
+  public void associaPublicacao(Publicacao publicacao) throws IntercurrenceException {
+    throw new IntercurrenceException("Nao foi possivel associar a publicacao, pois o projeto nao esta em andamento");
   }
 }

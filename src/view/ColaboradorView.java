@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import src.model.*;
-import src.util.Util;
+import src.util.*;
 import src.view.reports.ColaboradorReport;
 import src.view.reports.Relatorio;
 
@@ -34,26 +34,29 @@ public class ColaboradorView {
 
       switch (op) {
         case "1":
-          Util.clrscr();
-          System.out.println("Para cadastrar um novo colaborador, informe os dados pedidos:");
+          try {
+            Util.clrscr();
+            System.out.println("Para cadastrar um novo colaborador, informe os dados pedidos:");
 
-          System.out.println();
+            System.out.println();
 
-          System.out.print(" - Nome: ");
-          String nome = scanner.nextLine();
-          System.out.print(" - Email: ");
-          String email = scanner.nextLine();
-          System.out
-              .print(" - Tipo (1 = Graduando / 2 = Mestrando / 3 = Doutorando / 4 = Professor / 5 = Pesquisador): ");
-          String tipo = scanner.nextLine();
+            System.out.print(" - Nome: ");
+            String nome = scanner.nextLine();
+            System.out.print(" - Email: ");
+            String email = scanner.nextLine();
+            System.out
+                .print(" - Tipo (1 = Graduando / 2 = Mestrando / 3 = Doutorando / 4 = Professor / 5 = Pesquisador): ");
+            String tipo = scanner.nextLine();
 
-          String r;
+            lab.criarColaborador(nome, email, Integer.parseInt(tipo));
 
-          r = lab.criarColaborador(nome, email, Integer.parseInt(tipo));
-
-          Util.clrscr();
-          System.out.println(r == "" ? "Colaborador criado com sucesso!" : r);
-          System.out.println();
+            Util.clrscr();
+            System.out.println("Colaborador criado com sucesso!");
+            System.out.println();
+          } catch (IntercurrenceException e) {
+            System.out.println(e.getMessage());
+            System.out.println();
+          }
           break;
         case "2":
           Util.clrscr();
