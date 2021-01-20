@@ -132,7 +132,7 @@ Alguns aspectos da modelagem não ficaram explícitos na especificação, de for
 
 4. Orientações são uma classe a parte ou elas e as publicações são herdeiras da classe “Produção Acadêmica” com os atributos de publicação?
 
-	**As classes Publicacao e Orientacao herdarão de ProducaoAcademica. Esta última terá título e ano de publicação.**
+	**As classes _Publicacao_ e _Orientacao_ herdarão de _ProducaoAcademica_. Esta última terá título e ano de publicação.**
 
 5. Quantos alunos podem ser orientados (um ou vários) e quantos professores podem participar de uma orientação (um ou vários)?
 
